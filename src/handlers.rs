@@ -80,11 +80,7 @@ pub(super) async fn call_incoming(State(state): State<AppState>) -> Response {
     info!("Picked greeting: {greeting}");
 
     // Build response
-    let mut verbs = vec![
-        Verb::Pause(Pause::new(1)),
-        tts.say(greeting),
-        Verb::Pause(Pause::new(1)),
-    ];
+    let mut verbs = vec![tts.say(greeting), Verb::Pause(Pause::new(1))];
     verbs.append(&mut joke_verbs);
     verbs.push(Verb::Pause(Pause::new(1)));
 
