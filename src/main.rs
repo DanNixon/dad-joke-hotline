@@ -52,6 +52,10 @@ async fn main() -> anyhow::Result<()> {
 
     info!("Let comedy commence!");
 
+    info!(
+        "Running Jambonz webhook handlers at {}",
+        cli.webhook_address
+    );
     let listener = TcpListener::bind(&cli.webhook_address).await?;
     axum::serve(listener, app).await?;
 
