@@ -11,7 +11,7 @@ metrics = "0.22.3"
 metrics-exporter-prometheus = { version = "0.14.0", default-features = false, features = ["http-listener"] }
 rand = "0.8.5"
 reqwest = { version = "0.12.4", default-features = false, features = ["rustls-tls", "json"] }
-serde = { version = "1.0.202", features = ["derive"] }
+serde = { version = "1.0.203", features = ["derive"] }
 tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread", "signal"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
