@@ -24,7 +24,8 @@ struct AppState {
     http_client: reqwest::Client,
 }
 
-const METRIC_CALLS_NAME: &str = "dadjokehotline_calls";
+const METRIC_CALLS_NAME: &str = "dadjokehotline_calls_total";
+const METRIC_ERRORS_NAME: &str = "dadjokehotline_api_errors_total";
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -39,6 +40,10 @@ async fn main() -> anyhow::Result<()> {
         .install()?;
 
     describe_counter!(METRIC_CALLS_NAME, "Total number of calls received");
+    describe_counter!(
+        METRIC_ERRORS_NAME,
+        "Total number of errors receiving or parsing a joke from the icanhazdadjoke API"
+    );
 
     // Shared application state
     let state = AppState {
