@@ -78,6 +78,7 @@ pub(super) async fn call_incoming(State(state): State<AppState>) -> Response {
         "I know my way around a good comedy joke.",
         "How about this one?",
         "One top tier joke, coming right up!",
+        "Yes, you can haz dad joke.",
     ];
     let greeting = greetings
         .choose(&mut rand::thread_rng())
