@@ -8,6 +8,7 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
+use metrics::counter;
 use rand::seq::SliceRandom;
 use serde::Deserialize;
 use tracing::{error, info};
@@ -16,8 +17,7 @@ pub(super) async fn call_status(Json(status): Json<crate::jambonz::CallStatusDet
     info!("Call status: {:?}", status);
 
     let call_status = format!("{:?}", status.call_status);
-    metrics::counter!(crate::METRIC_CALLS_NAME, "status" => call_status, "from" => status.from)
-        .increment(1);
+    counter!(crate::METRIC_CALLS_NAME, "status" => call_status, "from" => status.from).increment(1);
 }
 
 #[derive(Debug, Deserialize)]
@@ -30,6 +30,9 @@ struct Joke {
     #[allow(unused)]
     status: i32,
 }
+
+const ERROR_MESSAGE: &str =
+    "Oh no, the internet is sad and has decided that you get no joke. Sorry about that.";
 
 pub(super) async fn call_incoming(State(state): State<AppState>) -> Response {
     info!("Handling call");
@@ -54,12 +57,14 @@ pub(super) async fn call_incoming(State(state): State<AppState>) -> Response {
             }
             Err(e) => {
                 error!("Error parsing joke: {e}");
-                vec![tts.say("Oh no, the internet is mad and has decided that you get no joke. Sorry about that.")]
+                counter!(crate::METRIC_ERRORS_NAME).increment(1);
+                vec![tts.say(ERROR_MESSAGE)]
             }
         },
         Err(e) => {
             error!("Error retrieving joke: {e}");
-            vec![tts.say("Oh no, the internet is sad and has decided that you get no joke. Sorry about that.")]
+            counter!(crate::METRIC_ERRORS_NAME).increment(1);
+            vec![tts.say(ERROR_MESSAGE)]
         }
     };
 
