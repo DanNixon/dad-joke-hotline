@@ -1,6 +1,6 @@
 use crate::jambonz::{Say, SaySynthesizer, Verb};
 use rand::{
-    distributions::{Distribution, Standard},
+    distr::{Distribution, StandardUniform},
     Rng,
 };
 
@@ -12,9 +12,9 @@ pub(crate) enum VoiceActor {
     AwsEmma,
 }
 
-impl Distribution<VoiceActor> for Standard {
+impl Distribution<VoiceActor> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> VoiceActor {
-        match rng.gen_range(0..2) {
+        match rng.random_range(0..2) {
             0 => VoiceActor::AwsAmy,
             1 => VoiceActor::AwsBrian,
             2 => VoiceActor::AwsEmma,

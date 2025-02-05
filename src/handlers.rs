@@ -9,7 +9,7 @@ use axum::{
     Json,
 };
 use metrics::counter;
-use rand::seq::SliceRandom;
+use rand::seq::IndexedRandom;
 use serde::Deserialize;
 use tracing::{error, info};
 
@@ -81,7 +81,7 @@ pub(super) async fn call_incoming(State(state): State<AppState>) -> Response {
         "Yes, you can haz dad joke.",
     ];
     let greeting = greetings
-        .choose(&mut rand::thread_rng())
+        .choose(&mut rand::rng())
         .expect("this slice should not be empty so this should never be None");
     info!("Picked greeting: {greeting}");
 
